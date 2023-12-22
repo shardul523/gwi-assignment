@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { AuthContext } from ".";
+import { fetchUser } from "../utility";
 
-const AuthProvider = () => {
+const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null);
 
   useEffect(() => {
@@ -8,19 +10,18 @@ const AuthProvider = () => {
     const token = localStorage.getItem("token");
 
     const initializeToken = async () => {
-      const res = await fetch(`https://dummyjson.com/auth/users/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (res.status !== 200) return;
-
-      const user = await res.json();
-
+      const user = await fetchUser(token, id);
       if (user) setAuthToken({ token, id });
     };
+
+    if (!!id && !!token) initializeToken();
   }, []);
+
+  return (
+    <AuthContext.Provider value={[authToken, setAuthToken]}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+export default AuthProvider;
