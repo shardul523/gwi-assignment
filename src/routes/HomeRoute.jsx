@@ -1,29 +1,21 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context";
+
 import HomePage from "../pages/HomePage";
-import { useEffect, useState } from "react";
-import { validateToken } from "../utility";
+import { useValidateToken } from "../hooks";
+import LoaderScreen from "../components/LoaderScreen";
 
 const HomeRoute = () => {
-  const [auth] = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isValidated, setIsValidated] = useState(false);
+  const {status, data} = useValidateToken()
 
-  useEffect(() => {
-    const validateUser = async () => {
-      const isTokenValid = await validateToken(auth);
-      setIsValidated(isTokenValid);
-      setIsLoading(false);
-    };
-
-    validateUser();
-  }, [auth]);
-
-  if (isLoading) return <div>Loading...</div>;
-
-  if (isValidated) return <HomePage />;
-
-  return <Navigate to={"/sign-in"} replace={true} />;
+  switch(status) {
+    case 'pending':
+      return <LoaderScreen/>
+    case 'success':
+      if (data) return <HomePage/>
+      return <Navigate to={'/sign-in'} replace/>
+    default:
+      return <Navigate to={'/sign-in'} replace/>
+  }
 };
 
 export default HomeRoute;

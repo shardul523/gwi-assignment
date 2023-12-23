@@ -1,21 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../context";
-import { Navigate } from "react-router-dom";
-import { validateToken } from "../utility";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signInUser } from "../utility";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
 
 const SignInPage = () => {
   const userRef = useRef();
   const passRef = useRef();
-  const [auth, setAuth] = useAuth();
-  const [isValidated, setIsValidated] = useState(false);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const isValidToken = await validateToken(auth);
-      setIsValidated(isValidToken);
-    };
-    checkUser();
-  }, [auth]);
+  const navigate = useNavigate();
+  const { mutate } = useMutation(signInUser);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -23,36 +22,27 @@ const SignInPage = () => {
     userRef.current.value = "";
     const password = passRef.current.value;
     passRef.current.value = "";
-    console.log(username, password);
 
-    const loginRes = await fetch(`https://dummyjson.com/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (loginRes.status !== 200) return;
-
-    const user = await loginRes.json();
-    localStorage.setItem("id", user.id);
-    localStorage.setItem("token", user.token);
-    setAuth({ id: user.id, token: user.token });
+    try {
+      mutate(
+        { username, password },
+        { onSuccess: () => navigate("/", { replace: true }) }
+      );
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
-  if (isValidated) return <Navigate to={"/"} />;
-
   return (
-    <form onSubmit={onSubmitHandler}>
-      <div className="input-container">
-        <label htmlFor="username-input">Username</label>
-        <input ref={userRef} type="text" id="username-input" />
-      </div>
-      <div className="input-container">
-        <label htmlFor="password-input">Password</label>
-        <input ref={passRef} type="password" id="password-input" />
-      </div>
-      <button type="submit">Sign In</button>
-    </form>
+    <Container>
+      <FormControl onSubmit={onSubmitHandler}>
+        <FormLabel htmlFor="username-input">Username</FormLabel>
+        <Input ref={userRef} id="username-input" />
+        <FormLabel htmlFor="password-input">Password</FormLabel>
+        <Input ref={passRef} id="password-input" />
+        <Button type="submit">Sign In</Button>
+      </FormControl>
+    </Container>
   );
 };
 
