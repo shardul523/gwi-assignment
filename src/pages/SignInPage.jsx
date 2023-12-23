@@ -1,32 +1,33 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { signInUser } from "../utility";
-import {
-  Button,
-  Container,
-  FormControl,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
+import BodyLayout from "../components/layouts/BodyLayout";
+import { useAuth } from "../context";
 
 const SignInPage = () => {
-  const userRef = useRef();
-  const passRef = useRef();
+  const [, setAuth] = useAuth();
+  const [userInput, setUserInput] = useState("");
+  const [passInput, setPassInput] = useState("");
   const navigate = useNavigate();
-  const { mutate } = useMutation(signInUser);
+  const { mutate, isPending } = useMutation({
+    mutationFn: signInUser,
+  });
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    const username = userRef.current.value;
-    userRef.current.value = "";
-    const password = passRef.current.value;
-    passRef.current.value = "";
+  const onSubmitHandler = async () => {
+    const username = userInput;
+    const password = passInput;
 
     try {
       mutate(
         { username, password },
-        { onSuccess: () => navigate("/", { replace: true }) }
+        {
+          onSuccess: (data) => {
+            setAuth({ token: data.token, id: data.id });
+            navigate("/", { replace: true });
+          },
+        }
       );
     } catch (err) {
       console.error(err.message);
@@ -34,15 +35,26 @@ const SignInPage = () => {
   };
 
   return (
-    <Container>
-      <FormControl onSubmit={onSubmitHandler}>
+    <BodyLayout>
+      <FormControl>
         <FormLabel htmlFor="username-input">Username</FormLabel>
-        <Input ref={userRef} id="username-input" />
+        <Input
+          value={userInput}
+          id="username-input"
+          onChange={(e) => setUserInput(e.target.value)}
+        />
         <FormLabel htmlFor="password-input">Password</FormLabel>
-        <Input ref={passRef} id="password-input" />
-        <Button type="submit">Sign In</Button>
+        <Input
+          value={passInput}
+          type="password"
+          id="password-input"
+          onChange={(e) => setPassInput(e.target.value)}
+        />
+        <Button isLoading={isPending} onClick={onSubmitHandler}>
+          Sign In
+        </Button>
       </FormControl>
-    </Container>
+    </BodyLayout>
   );
 };
 

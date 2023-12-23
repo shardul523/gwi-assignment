@@ -28,6 +28,8 @@ export const validateToken = async (auth) => {
 };
 
 export const signInUser = async ({ username, password }) => {
+  console.log("Username", username);
+  console.log("Password", password);
   const res = await fetch("https://dummyjson.com/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -35,6 +37,8 @@ export const signInUser = async ({ username, password }) => {
   });
 
   const data = await res.json();
+
+  console.log(data);
 
   if (!res.ok) throw new Error(data.message || "Login Failed");
 
