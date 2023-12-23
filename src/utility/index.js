@@ -1,35 +1,33 @@
-export const fetchUser = async (token, id) => {
-  const res = await fetch(`https://dummyjson.com/auth/users/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    method: "GET",
-  });
+// export const fetchUser = async (token, id) => {
+//   const res = await fetch(`https://dummyjson.com/auth/users/${id}`, {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//       "Content-Type": "application/json",
+//     },
+//     method: "GET",
+//   });
 
-  if (res.status !== 200) return null;
+//   if (res.status !== 200) return null;
 
-  const user = await res.json();
+//   const user = await res.json();
 
-  return user;
-};
+//   return user;
+// };
 
-export const validateToken = async (auth) => {
-  if (auth && "token" in auth) {
-    const response = await fetch("https://dummyjson.com/auth/test", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${auth.token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return response.status === 200;
-  }
-};
+// export const validateToken = async (auth) => {
+//   if (auth && "token" in auth) {
+//     const response = await fetch("https://dummyjson.com/auth/test", {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${auth.token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     return response.status === 200;
+//   }
+// };
 
 export const signInUser = async ({ username, password }) => {
-  console.log("Username", username);
-  console.log("Password", password);
   const res = await fetch("https://dummyjson.com/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -38,12 +36,25 @@ export const signInUser = async ({ username, password }) => {
 
   const data = await res.json();
 
-  console.log(data);
-
   if (!res.ok) throw new Error(data.message || "Login Failed");
 
   localStorage.setItem("id", data.id);
   localStorage.setItem("token", data.token);
 
   return data;
+};
+
+export const fetchAllProducts = async () => {
+  const res = await fetch(
+    `https://dummyjson.com/products?limit=0&select=id,title,price,thumbnail`
+  );
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Could Not Fetch Products");
+  }
+
+  const products = await res.json();
+
+  return products;
 };

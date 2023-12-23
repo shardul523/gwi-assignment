@@ -4,12 +4,12 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar";
 
 const MainLayout = () => (
-    <Container>
-        <Box as="header">
-            <Navbar/>
-            <Outlet/>
-        </Box>
-    </Container>
-)
+  <Container minW={"100%"}>
+    <Box as="header">
+      <Navbar />
+    </Box>
+    <Outlet />
+  </Container>
+);
 
-export default MainLayout
+export default MainLayout;
