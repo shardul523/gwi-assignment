@@ -1,0 +1,15 @@
+.paginate {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.paginate li {
+    padding: 1rem;
+}
+
+.active-page {
+    background-color: yellow;
+    color: black;
+}
