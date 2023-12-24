@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { fetchAllProducts } from "../utility";
-import LoaderScreen from "../components/LoaderScreen";
 import { Flex, useMediaQuery } from "@chakra-ui/react";
 import Filter from "../components/home/Filter";
 import SearchBar from "../components/home/SearchBar";
@@ -19,10 +18,8 @@ const HomePage = () => {
     queryFn: fetchAllProducts,
   });
 
-  if (isPending) return <LoaderScreen />;
-
   return (
-    <Flex flexDir={"column"}>
+    <Flex flexDir={"column"} minH={"90vh"}>
       <Flex
         flexDir={isDesktop ? "row" : "column"}
         alignItems={"center"}
@@ -33,12 +30,15 @@ const HomePage = () => {
         <SearchBar search={searchParam} setSearch={setSearchParam} />
         <Filter filter={priceFilter} setFilter={setPriceFilter} />
       </Flex>
-      <Products
-        search={searchParam}
-        data={data}
-        flexGrow={1}
-        filter={priceFilter}
-      />
+      {isPending && <div>Loading Products</div>}
+      {!isPending && (
+        <Products
+          search={searchParam}
+          data={data}
+          flexGrow={1}
+          filter={priceFilter}
+        />
+      )}
     </Flex>
   );
 };

@@ -36,22 +36,16 @@ const Products = ({ data, search, filter, ...props }) => {
       <SimpleGrid
         columns={[2, 2, 3, 4]}
         spacing={"40px"}
-        my={"20px"}
+        my={"100px"}
         ml={"20px"}
       >
         {filteredProducts
           .slice(page * itemsPerPage, (page + 1) * itemsPerPage)
           .map((product) => (
-            <ProductCard
-              key={product.id}
-              img={product.thumbnail}
-              price={product.price}
-              description={product.description}
-              title={product.title}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
       </SimpleGrid>
-      <Box bg={"teal"} color={"white"}>
+      <Box bg={"teal"} color={"white"} position={"fixed"} bottom={0} w={"100%"}>
         <ReactPaginate
           className="paginate"
           nextLabel="next"

@@ -1,21 +1,18 @@
 import { Navigate } from "react-router-dom";
 
 import SignInPage from "../pages/SignInPage";
-import { useValidateToken } from "../hooks";
+
 import LoaderScreen from "../components/LoaderScreen";
+import { useAuth } from "../context";
 
 const SignInRoute = () => {
-  const {status, data} = useValidateToken()
+  const { authToken, isLoading } = useAuth();
 
-  switch(status) {
-    case 'pending':
-      return <LoaderScreen/>
-    case 'success':
-      if (data) return <Navigate to={'/'} replace/>
-      return <SignInPage/>
-    default:
-      return <Navigate to={'/'} replace/>
-  }
+  if (isLoading) return <LoaderScreen />;
+
+  if (authToken) return <Navigate to={"/"} replace />;
+
+  return <SignInPage />;
 };
 
 export default SignInRoute;
