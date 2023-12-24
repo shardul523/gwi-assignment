@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
@@ -11,11 +11,14 @@ const SignInPage = () => {
   const [userInput, setUserInput] = useState("");
   const [passInput, setPassInput] = useState("");
   const navigate = useNavigate();
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: signInUser,
   });
 
-  const onSubmitHandler = async () => {
+  const [isPending, setIsPending] = useState(false);
+
+  const onSubmitHandler = useCallback(async () => {
+    setIsPending(true);
     const username = userInput;
     const password = passInput;
 
@@ -27,12 +30,14 @@ const SignInPage = () => {
             setAuth({ token: data.token, id: data.id });
             navigate("/", { replace: true });
           },
+          onSettled: () => setIsPending(false),
         }
       );
     } catch (err) {
       console.error(err.message);
+      setIsPending(false);
     }
-  };
+  }, [mutate, navigate, setAuth, passInput, userInput, setIsPending]);
 
   return (
     <BodyLayout>

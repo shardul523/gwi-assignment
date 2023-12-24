@@ -23,7 +23,7 @@ const Filter = ({ filter, setFilter }) => {
   );
 
   return (
-    <Box height={"100%"} w={"50%"} my={"20px"}>
+    <Box w={"50%"}>
       <FormControl
         display={"flex"}
         justifyContent={"center"}
@@ -33,6 +33,7 @@ const Filter = ({ filter, setFilter }) => {
         <Box>
           <FormLabel htmlFor="min-price">Min Price</FormLabel>
           <Input
+            bg={"white"}
             id="min-price"
             type="number"
             value={filter.min}
@@ -42,6 +43,7 @@ const Filter = ({ filter, setFilter }) => {
         <Box>
           <FormLabel htmlFor="max-price">Max Price</FormLabel>
           <Input
+            bg={"white"}
             id="max-price"
             type="number"
             value={filter.max}

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { fetchAllProducts } from "../utility";
 import LoaderScreen from "../components/LoaderScreen";
-import { Divider, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Flex, useMediaQuery } from "@chakra-ui/react";
 import Filter from "../components/home/Filter";
 import SearchBar from "../components/home/SearchBar";
 import Products from "../components/home/Products";
@@ -27,11 +27,12 @@ const HomePage = () => {
         flexDir={isDesktop ? "row" : "column"}
         alignItems={"center"}
         gap={5}
+        py={"30px"}
+        mx={"20px"}
       >
         <SearchBar search={searchParam} setSearch={setSearchParam} />
         <Filter filter={priceFilter} setFilter={setPriceFilter} />
       </Flex>
-      <Divider orientation="horizontal" ml={"20px"} />
       <Products
         search={searchParam}
         data={data}

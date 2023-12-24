@@ -1,15 +1,15 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 
 import Navbar from "../Navbar";
 
 const MainLayout = () => (
-  <Container minW={"100%"}>
+  <Box bg={"gray.100"}>
     <Box as="header">
       <Navbar />
     </Box>
     <Outlet />
-  </Container>
+  </Box>
 );
 
 export default MainLayout;
