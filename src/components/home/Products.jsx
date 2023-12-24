@@ -7,7 +7,7 @@ import ProductCard from "./ProductCard";
 
 const itemsPerPage = 8;
 
-const Products = ({ data, search, ...props }) => {
+const Products = ({ data, search, filter, ...props }) => {
   const [page, setPage] = useState(0);
 
   const { products = [] } = useMemo(() => data, [data]);
@@ -15,12 +15,14 @@ const Products = ({ data, search, ...props }) => {
   const filteredProducts = useMemo(
     () =>
       products.filter((product) => {
+        if (product.price < filter.min || product.price > filter.max)
+          return false;
         const { title } = product;
         const lowerTitle = title.toLowerCase();
         const lowerSearch = search.toLowerCase();
         return lowerTitle.includes(lowerSearch);
       }),
-    [search, products]
+    [search, products, filter]
   );
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 

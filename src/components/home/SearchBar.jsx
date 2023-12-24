@@ -6,9 +6,9 @@ const SearchBar = ({ search, setSearch }) => {
       placeholder="Search products"
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      marginRight={"20px"}
-      w={"300px"}
+      width={"50%"}
       my={"50px"}
+      borderColor={"teal"}
     />
   );
 };
