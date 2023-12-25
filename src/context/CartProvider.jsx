@@ -1,5 +1,5 @@
-import { useReducer } from "react";
-import { CartContext } from ".";
+import { useEffect, useReducer } from "react";
+import { CartContext, useAuth } from ".";
 
 const addItem = (state, action) => [
   ...state,
@@ -26,6 +26,8 @@ const reducer = (state, action) => {
       return updateItem(state, action);
     case "remove":
       return removeItem(state, action);
+    case "reset":
+      return [];
     default:
       return state;
   }
@@ -34,7 +36,18 @@ const reducer = (state, action) => {
 const initialCart = [];
 
 const CartProvider = ({ children }) => {
-  const [cart, dispatch] = useReducer(reducer, initialCart);
+  const { authToken } = useAuth();
+  const [cart, dispatch] = useReducer(reducer, initialCart, (state) => {
+    if (!authToken) return state;
+    const storedCartStr = localStorage.getItem(`Cart-${authToken.id}`);
+    if (storedCartStr) return JSON.parse(storedCartStr);
+  });
+
+  useEffect(() => {
+    if (!authToken) {
+      dispatch({ type: "reset" });
+    }
+  }, [authToken]);
 
   return (
     <CartContext.Provider value={{ cart, dispatch }}>
