@@ -10,15 +10,16 @@ const savedToken = {
 };
 
 const AuthProvider = ({ children }) => {
-  const [authToken, setAuthToken] = useState(savedToken);
+  const [authToken, setAuthToken] = useState(
+    savedToken.token ? savedToken : null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
   const { mutate } = useMutation({ mutationFn: signInUser });
-  const { data } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: ["validateToken"],
     queryFn: async () => {
-      if (!authToken) return false;
       const res = await fetch("https://dummyjson.com/auth/test", {
         headers: { Authorization: `Bearer ${authToken?.token}` },
       });
@@ -28,9 +29,9 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!data) setAuthToken(null);
+    if (!data && isSuccess) setAuthToken(null);
     setIsLoading(false);
-  }, [data]);
+  }, [data, isSuccess]);
 
   const login = useCallback(
     ({ username, password }) => {
