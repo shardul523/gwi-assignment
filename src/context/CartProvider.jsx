@@ -37,11 +37,7 @@ const initialCart = [];
 
 const CartProvider = ({ children }) => {
   const { authToken } = useAuth();
-  const [cart, dispatch] = useReducer(reducer, initialCart, (state) => {
-    if (!authToken) return state;
-    const storedCartStr = localStorage.getItem(`Cart-${authToken.id}`);
-    if (storedCartStr) return JSON.parse(storedCartStr);
-  });
+  const [cart, dispatch] = useReducer(reducer, initialCart);
 
   useEffect(() => {
     if (!authToken) {
