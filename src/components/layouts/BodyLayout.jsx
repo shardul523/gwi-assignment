@@ -4,6 +4,8 @@ const BodyLayout = ({ children }) => (
   <Container
     minH={"90vh"}
     display={"flex"}
+    flexDir={"column"}
+    gap={5}
     justifyContent={"center"}
     alignItems={"center"}
   >

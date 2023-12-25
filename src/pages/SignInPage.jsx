@@ -1,5 +1,13 @@
 import { useCallback, useState } from "react";
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
 import BodyLayout from "../components/layouts/BodyLayout";
 import { useAuth } from "../context";
 
@@ -18,6 +26,11 @@ const SignInPage = () => {
 
   return (
     <BodyLayout>
+      {isError && (
+        <Alert status="error">
+          <AlertIcon /> Invalid login credentials
+        </Alert>
+      )}
       <FormControl
         p={10}
         bg={"white"}
