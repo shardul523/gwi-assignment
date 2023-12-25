@@ -1,5 +1,7 @@
 # Internship Assignment - Build With Innovation Pvt Ltd
 
+[**Live Demo**](https://bwi-cart.netlify.app)
+
 This is a react app created as per the instructions received as an assignment.
 
 It's goals are as follows -
@@ -14,3 +16,8 @@ It's goals are as follows -
 8. Create add to cart button on product cards.
 
 All the goals stated above have been achieved in this project.
+
+## Improvements being worked upon:
+
+- Cart state does not get saved and is not preserved across multiple logins
+- A separate Cart page can be built to view and manipulate the cart
