@@ -30,7 +30,7 @@ const HomePage = () => {
         <SearchBar search={searchParam} setSearch={setSearchParam} />
         <Filter filter={priceFilter} setFilter={setPriceFilter} />
       </Flex>
-      {isPending && <div>Loading Products</div>}
+      {isPending && <div>Loading Products...</div>}
       {!isPending && (
         <Products
           search={searchParam}
